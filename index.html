@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/alpine.js" defer></script>
+    <script src="js/tailwindcss.js"></script>
+</head>
+<body x-data="">
+    <header class="grid grid-cols-[auto_1fr_auto] bg-blue-400 text-white py-2 px:2 md:px-[6%]">
+        <a href="#">Logo</a>
+
+        <nav class="justify-self-center space-x-6">
+            <a href="pages/admin.html">Admin panel</a>
+
+            <a href="pages/user.html">User panel</a>
+        </nav>
+
+        <ul class="flex gap-x-6">
+            <li><a href="pages/register.html">Register</a></li>
+
+            <li><a href="pages/login.html">Login</a></li>
+
+            <li><a href="">Exit</a></li>
+        </ul>
+    </header>
+
+    <main class="py-8 px-2 md:px-[6%]">
+        <h1 class="text-3xl font-bold">Home</h1>
+    </main>
+</body>
+</html>

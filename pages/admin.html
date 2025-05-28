@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/alpine.js" defer></script>
+    <script src="../js/tailwindcss.js"></script>
+</head>
+<body x-data="{
+    login: localStorage.getItem('login'),
+    user: JSON.parse(localStorage.getItem('user')),
+    token: JSON.parse(localStorage.getItem('token')),
+    logOut() {
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+        location.assign('../index.html')
+
+    }
+}">
+    <header class="grid grid-cols-[auto_1fr_auto] bg-blue-400 text-white py-2 px:2 md:px-[6%]">
+        <a href="../index.html">Logo</a>
+
+        <nav class="justify-self-center space-x-6">
+            <a href="#">Admin panel</a>
+        </nav>
+
+        <ul class="flex gap-x-6">
+            <li><a href="" x-on:click.prevent="logOut()">Exit</a></li>
+        </ul>
+    </header>
+
+    <main class="py-8 px-2 md:px-[6%]">
+        <h1 class="text-3xl font-bold">Admin panel</h1>
+        <!-- <p x-text="login"></p>
+        <p x-text="user.email"></p>
+        <p x-text="token"></p> -->
+        <section class="grid md:grid-cols-2 gap-x-2">
+            <img src="" alt="" x-bind:src="user.avatar" class="object-fit-cover h-full w-full">
+
+            <ul class="self-center space-y-4">
+                <template x-for="(item, key) in user">
+                    <li class="flex gap-x-4" x-show="key != 'avatar'">
+                        <h3 x-text="key" class="text-xl font-bold"></h3>
+                        <span x-text="item"></span>
+                    </li>
+                </template>
+
+                <li class="flex gap-x-4">
+                    <h3 x-text="'token'" class="text-xl font-bold"></h3>
+                    <span x-text="token"></span>
+                </li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
