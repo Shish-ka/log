@@ -7,7 +7,34 @@
     <script src="../js/alpine.js" defer></script>
     <script src="../js/tailwindcss.js"></script>
 </head>
-<body x-data="">
+<body x-data="{
+    host: 'https://test.informat74.ru/api',
+    user: {},
+    errors: {},
+    message: null,
+    async login() {
+        let responce = await fetch (`${this.host}/register`, {
+            method: 'POST',
+            body: new FormData($refs.login)
+        })
+
+        responce = await responce.json()
+
+        if(!responce.error) {
+            localStorage.setItem('user', JSON.stringify (responce.user))
+            localStorage.setItem('token', JSON.stringify (responce.token))
+            location.assign('user.html')
+        }
+        else {
+            if(responce.errors != undefined) {
+                this.errors = responce.errors
+            }
+            if(responce.message != undefined) {
+                this.message = responce.message
+            }
+        }
+    },
+}">
     <header class="grid grid-cols-[auto_1fr_auto] bg-blue-400 text-white py-2 px:2 md:px-[6%]">
         <a href="../index.html">Logo</a>
 
@@ -23,6 +50,50 @@
 
     <main class="py-8 px-2 md:px-[6%]">
         <h1 class="text-3xl font-bold">Register</h1>
+
+        <section class="grid md:grid-cols-2 py-6 gap-x-2">
+            <div class="grid bg-blue-400 text-white grid items-center">
+                <h2 class="justify-self-center text-2xl font-bold">Register form</h2>
+
+                <h2 class="justify-self-center text-2xl font-bold text-red-500" x-text="message"></h2>
+            </div>
+
+            <form action="" class="space-y-6" x-on:submit.prevent="login()" x-ref="login">
+                <div class="grid">
+                    <input type="text" placeholder="your email" name="email" class="border-b p-1">
+
+                    <template x-for="error in errors.email">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <div class="grid">
+                    <input type="text" placeholder="your password" name="password" class="border-b p-1">
+
+                    <template x-for="error in errors.password">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <div class="grid">
+                    <input type="text" placeholder="your name" name="name" class="border-b p-1">
+
+                    <template x-for="error in errors.name">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <div class="grid">
+                    <input type="file" placeholder="your avatar" name="avatar" class="border-b p-1">
+
+                    <template x-for="error in errors.avatar">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <div class="grid"><button type="submit" class="bg-blue-400 text-white p-2 cursor-pointer">Login</button></div>
+            </form>
+        </section>
     </main>
 </body>
 </html>

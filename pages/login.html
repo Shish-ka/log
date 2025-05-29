@@ -23,7 +23,11 @@
         if(!responce.error) {
             localStorage.setItem('user', JSON.stringify (responce.user))
             localStorage.setItem('token', JSON.stringify (responce.token))
-            location.assign('admin.html')
+            if(responce.user.role == 'admin') {
+                location.assign('admin.html')
+            } else {
+                location.assign('user.html')
+            }
         }
         else {
             if(responce.errors != undefined) {
