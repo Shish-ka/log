@@ -10,6 +10,16 @@
 <body x-data="{
     login: localStorage.getItem('login'),
     user: JSON.parse(localStorage.getItem('user')),
+    categories: [
+        {
+            id:1,
+            name: 'C1'
+        },
+        {
+            id:2,
+            name: 'C2'
+        },
+    ],
     token: JSON.parse(localStorage.getItem('token')),
     logOut() {
         localStorage.removeItem('user')
@@ -38,7 +48,7 @@
 
             <ul class="self-center space-y-4">
                 <template x-for="(item, key) in user">
-                    <li class="flex gap-x-4" x-show="key != 'avatar'">
+                    <li class="flex gap-x-4" x-show="(key != 'avatar') & (key != 'posts')">
                         <h3 x-text="key" class="text-xl font-bold"></h3>
                         <span x-text="item"></span>
                     </li>
@@ -49,6 +59,95 @@
                     <span x-text="token"></span>
                 </li>
             </ul>
+        </section>
+
+        <section x-data="{
+            isCreate: false,
+            errors: {},
+            async createPost() {
+                this.isCreate = !this.isCreate
+                if(this.isCreate) {
+                    let responce = await fetch(`https://test.informat74.ru/api/categories`)
+                    responce = await responce.json()
+                    this.categories = responce.data
+                }
+            },
+            async savePost() {
+                let responce = await fetch(`https://test.informat74.ru/api/posts`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Accept':'application/json',
+                        'Authorization':`Bearer ${token}`
+                    },
+                    body: new FormData($refs.form)
+                })
+                responce = await responce.json()
+                if(responce.errors) {
+                    this.errors = responce.errors
+                }
+            }
+        }">
+            <button x-on:click="createPost()" class="bg-blue-400 text-white p-2 cursor-pointer">Add post</button>
+
+            <div x-show="isCreate"><h2>Create post</h2>
+
+            <form action="" x-ref="form" x-on:submit.prevent="savePost()">
+                <div class="grid">
+                    <input type="text" name="title" placeholder="title" class="border p-1">
+
+                    <template x-for="error in errors.title">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <div class="grid">
+                    <textarea name="body" placeholder="body" class="border p-1"></textarea>
+
+                    <template x-for="error in errors.body">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <div class="grid">
+                    <input type="file" name="image" class="border p-1">
+
+                    <template x-for="error in errors.image">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <div class="grid">
+                    <label for="">
+                        <span>Published:</span>
+
+                        <input type="checkbox" name="is_published" value="1" checked class="h-5 w-5">
+                    </label>
+
+                    <template x-for="error in errors.is_published">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <div class="grid">
+                    <input type="text" name="user_id" x-bind:value="user.id" hidden>
+                </div>
+
+                <div class="grid">
+                    <select name="category_id" id="" class="border p-1">
+                        <template x-for="category in categories">
+                            <option x-bind:value="category.id" x-text="category.name"></option>
+                        </template>
+
+                    </select>
+
+                    <template x-for="error in errors.category_id">
+                        <span class="text-red-300" x-text="error"></span>
+                    </template>
+                </div>
+
+                <button class="bg-blue-400 text-white p-2 cursor-pointer" x-on:click="savePost()">Create</button></div>
+            </form>
         </section>
     </main>
 </body>

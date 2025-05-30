@@ -26,8 +26,44 @@
         </ul>
     </header>
 
-    <main class="py-8 px-2 md:px-[6%]">
+    <main class="grid gap-y-8 py-8 px-2 md:px-[6%]">
         <h1 class="text-3xl font-bold">Home</h1>
+        
+        <section class="grid gap-y-4" x-data="{
+            host: 'https://test.informat74.ru/api',
+            posts: {},
+            async download() {
+                let responce = await fetch (`${this.host}/posts`)
+                responce = await responce.json()
+                this.posts = responce.posts
+            }
+        }">
+            <h2 class="text-2xl font-bold">All posts</h2>
+
+            <button x-on:click="download()" class="bg-blue-400 text-white p-2 cursor-pointer">Download</button>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <template x-for="post in posts">
+                    <article class="grid grid-rows-[auto_300px_1fr_auto] gap-y-2 bg-gray-100 p-6 rounded">
+                        <h3 class="text-xl font-bold" x-text="post.title"></h3>
+
+                        <img class="object-cover h-full w-full rounded"
+                        x-bind:src="post.image" alt="">
+
+                        <p x-text="post.body"></p>
+
+                        <div class="">
+                            <p><span class="font-bold">User:</span> <span x-text="post.user"></span></p>
+
+                            <p><span class="font-bold">Category:</span> <span x-text="post.category"></span></p>
+                        </div>
+                    </article>
+                </template>
+                
+
+                
+            </div>
+        </section>
     </main>
 </body>
 </html>
