@@ -78,7 +78,7 @@
                     method: 'POST',
                     headers: {
                         'Accept':'application/json',
-                        'Authorization':`Bearer ${token}`
+                        Authorization:`Bearer ${this.token}`
                     },
                     body: new FormData($refs.form)
                 })
@@ -92,7 +92,7 @@
 
             <div x-show="isCreate"><h2>Create post</h2>
 
-            <form action="" x-ref="form" x-on:submit.prevent="savePost()">
+            <form action="" x-ref="form" enctype="multipart/form-data" x-on:submit.prevent="savePost()">
                 <div class="grid">
                     <input type="text" name="title" placeholder="title" class="border p-1">
 
@@ -146,7 +146,7 @@
                     </template>
                 </div>
 
-                <button class="bg-blue-400 text-white p-2 cursor-pointer" x-on:click="savePost()">Create</button></div>
+                <button class="bg-blue-400 text-white p-2 cursor-pointer">Create</button></div>
             </form>
         </section>
     </main>
